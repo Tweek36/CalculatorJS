@@ -30,7 +30,11 @@ function factorial(n) {
 inputLine.onkeypress = function() {
     validate(event);
     if(event.keyCode == 13){
-        outputLine.textContent = calculate(inputLine.value);
+        try {
+            outputLine.textContent = calculate(inputLine.value);
+        } catch (error) {
+            outputLine.textContent = 'Ошибка'
+        }
     }
 }
 
@@ -97,7 +101,11 @@ for(let i = 0; i < document.getElementsByClassName('dot').length; i++){
 
 for(let i = 0; i < document.getElementsByClassName('ans').length; i++){
     document.getElementsByClassName('ans')[i].onclick = function() {
-        outputLine.textContent = calculate(inputLine.value);
+        try {
+            outputLine.textContent = calculate(inputLine.value);
+        } catch (error) {
+            outputLine.textContent = 'Ошибка'
+        }
     }
 }
 
