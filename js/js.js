@@ -75,25 +75,25 @@ for(let i = 0; i < document.getElementsByClassName('pow').length; i++){
 
 for(let i = 0; i < document.getElementsByClassName('div').length; i++){ 
     document.getElementsByClassName('div')[i].onclick = function() {
-        if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "/";
+        if(['0','1','2','3','4','5','6','7','8','9',')',].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "/";
     }
 }
 
 for(let i = 0; i < document.getElementsByClassName('mul').length; i++){
     document.getElementsByClassName('mul')[i].onclick = function() { 
-        if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "*";
+        if(['0','1','2','3','4','5','6','7','8','9',')','π','e'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "*";
     }
 }
 
 for(let i = 0; i < document.getElementsByClassName('minus').length; i++){
     document.getElementsByClassName('minus')[i].onclick = function() { 
-        if(['0','1','2','3','4','5','6','7','8','9',')','('].includes(inputLine.value[inputLine.value.length-1])||inputLine.value.length==0) inputLine.value += "-";
+        if(['0','1','2','3','4','5','6','7','8','9',')','(','π','e'].includes(inputLine.value[inputLine.value.length-1])||inputLine.value.length==0) inputLine.value += "-";
     }
 }
 
 for(let i = 0; i < document.getElementsByClassName('plus').length; i++){
     document.getElementsByClassName('plus')[i].onclick = function() {
-        if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "+";
+        if(['0','1','2','3','4','5','6','7','8','9',')','π','e'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "+";
     }
 }
 
@@ -119,7 +119,13 @@ document.getElementsByClassName('(')[0].onclick = function() {
 }
 
 document.getElementsByClassName(')')[0].onclick = function() {
-    if(['0','1','2','3','4','5','6','7','8','9','π','e',')','!'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += ')';
+    let o = 0
+    let c = 0
+    for(let i in inputLine.value){
+        if(inputLine.value[i]=='(') o++;
+        if(inputLine.value[i]==')') c++;
+    }
+    if(o-c&&['0','1','2','3','4','5','6','7','8','9','π','e',')','!'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += ')';
 }
 
 document.getElementsByClassName('sin')[0].onclick = function() {
