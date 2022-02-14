@@ -5,7 +5,7 @@ function validate(evt) {
     var theEvent = evt || window.event;
     var key = theEvent.keyCode || theEvent.which;
     key = String.fromCharCode( key );
-    if(!['0','1','2','3','4','5','6','7','8','9',')','n','l','g','(','e','!','.','/','*','-','+','^'].includes(key)) {
+    if(!['0','1','2','3','4','5','6','7','8','9',')','n','l','g','(','e','!','.','/','*','-','+'].includes(key)) {
         theEvent.returnValue = false;
         if(theEvent.preventDefault) theEvent.preventDefault();
     }
@@ -21,6 +21,9 @@ function validate(evt) {
     if(key == 'r'){
         inputLine.value += '√(';
     }
+    if(key == '^'){
+        inputLine.value += '^(';
+    }
 }
 
 function factorial(n) {
@@ -34,6 +37,7 @@ inputLine.onkeypress = function() {
             outputLine.textContent = calculate(inputLine.value);
         } catch (error) {
             outputLine.textContent = 'Ошибка'
+            console.log(error)
         }
     }
 }
@@ -65,7 +69,7 @@ for(let i = 0; i < document.getElementsByClassName('del').length; i++){
 
 for(let i = 0; i < document.getElementsByClassName('pow').length; i++){
     document.getElementsByClassName('pow')[i].onclick = function() { 
-        if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "^";
+        if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "^(";
     }
 }
 
@@ -83,7 +87,7 @@ for(let i = 0; i < document.getElementsByClassName('mul').length; i++){
 
 for(let i = 0; i < document.getElementsByClassName('minus').length; i++){
     document.getElementsByClassName('minus')[i].onclick = function() { 
-        if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "-";
+        if(['0','1','2','3','4','5','6','7','8','9',')','('].includes(inputLine.value[inputLine.value.length-1])||inputLine.value.length==0) inputLine.value += "-";
     }
 }
 
@@ -105,6 +109,7 @@ for(let i = 0; i < document.getElementsByClassName('ans').length; i++){
             outputLine.textContent = calculate(inputLine.value);
         } catch (error) {
             outputLine.textContent = 'Ошибка'
+            console.log(error)
         }
     }
 }
@@ -133,8 +138,10 @@ document.getElementsByClassName('lg')[0].onclick = function() {
     if(['/','*','-','+','(','^'].includes(inputLine.value[inputLine.value.length-1])||inputLine.value.length==0) inputLine.value += "lg(";
 }
 
-document.getElementsByClassName('!')[0].onclick = function() {
-    if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "!";
+for(let i = 0; i < document.getElementsByClassName('!').length; i++){
+    document.getElementsByClassName('!')[i].onclick = function() {
+        if(['0','1','2','3','4','5','6','7','8','9',')'].includes(inputLine.value[inputLine.value.length-1])) inputLine.value += "!";
+    }
 }
 
 document.getElementsByClassName('root')[0].onclick = function() {
@@ -159,72 +166,51 @@ for(let i = 0; i < 10; i++){
 
 function calculate(str) {
     let output = ''
-    let tmp = ''
-    let forciblyOpen = false
     for(let i = 0; i < str.length; i++){
         let iChar = str[i]
-        if(['0','1','2','3','4','5','6','7','8','9',')','s','i','n','c','o','l','g','√'].includes(iChar)) tmp += iChar;
+        if(['0','1','2','3','4','5','6','7','8','9',')','s','i','n','c','o','l','g','√','^','/','*','-','+','.'].includes(iChar)) output += iChar;
         switch (iChar){
-            case '^':
-                tmp = 'Math.pow(' + tmp + ','
-                forciblyOpen = true
-                break;
-            case '/':
-                if(forciblyOpen) {
-                    tmp += ')'
-                    forciblyOpen = false
-                }
-                tmp += '/'
-                output += tmp
-                tmp = ''
-                break;
-            case '*':
-                if(forciblyOpen) {
-                    tmp += ')'
-                    forciblyOpen = false
-                }
-                tmp += '*'
-                output += tmp
-                tmp = ''
-                break;
-            case '-':
-                if(forciblyOpen) {
-                    tmp += ')'
-                    forciblyOpen = false
-                }
-                tmp += '-'
-                output += tmp
-                tmp = ''
-                break;
-            case '+':
-                if(forciblyOpen) {
-                    tmp += ')'
-                    forciblyOpen = false
-                }
-                tmp += '+'
-                output += tmp
-                tmp = ''
-                break;
             case '(':
-                if(str[i-2]+str[i-1] == 'ln') {
-                    tmp = tmp.slice(0, -2)
-                    tmp += 'Math.log('
+                if(output[output.length-2]+output[output.length-1] == 'ln') {
+                    output = output.slice(0, -2)
+                    output += 'Math.log('
                 } else
-                if(str[i-2]+str[i-1] == 'lg') {
-                    tmp = tmp.slice(0, -2)
-                    tmp += 'Math.log10('
+                if(output[output.length-2]+output[output.length-1] == 'lg') {
+                    output = output.slice(0, -2)
+                    output += 'Math.log10('
                 } else
-                if(str[i-2]+str[i-1] == 'in') {
-                    tmp = tmp.slice(0, -3)
-                    tmp += 'Math.sin('
+                if(output[output.length-2]+output[output.length-1] == 'in') {
+                    output = output.slice(0, -3)
+                    output += 'Math.sin('
                 } else
-                if(str[i-2]+str[i-1] == 'os') {
-                    tmp = tmp.slice(0, -3)
-                    tmp += 'Math.cos('
+                if(output[output.length-2]+output[output.length-1] == 'os') {
+                    output = output.slice(0, -3)
+                    output += 'Math.cos('
                 } else
-                if(str[i-1] == '√') {
-                    tmp = tmp.slice(0, -1)
-                    tmp += 'Math.sqrt('
+                if(output[output.length-1] == '√') {
+                    output = output.slice(0, -1)
+                    output += 'Math.sqrt('
+                } else 
+                if(output[output.length-1] == '^'){
+                    output = output.slice(0, -1)
+                    let openParenthesis = 0
+                    let closeParenthesis = 0
+                    let tmp = ''
+                    if(output[output.length-1] == ')'){
+                        do{
+                            if(output[output.length-1] == ')') closeParenthesis++
+                            if(output[output.length-1] == '(') openParenthesis++
+                            tmp += output[output.length-1]
+                            output = output.slice(0,-1)
+                        }while(closeParenthesis - openParenthesis);
+                    } else {
+                        do {
+                            tmp += output[output.length-1]
+                            output = output.slice(0,-1)
+                        } while (output&&!['/','*','-','+'].includes(output[output.length-1]));
+                    }
+                    tmp = tmp.split("").reverse().join("")
+                    output += 'Math.pow(' + tmp + ','
                 } else {
                     output += '('
                 }
@@ -236,13 +222,37 @@ function calculate(str) {
                 output += 'Math.PI'
                 break;
             case '!':
-                output += 'factorial('+tmp+')'
-                tmp=''
+                let openParenthesis = 0
+                let closeParenthesis = 0
+                let tmp = ''
+                if(output[output.length-1] == ')'){
+                    do{
+                        if(output[output.length-1] == ')') closeParenthesis++
+                        if(output[output.length-1] == '(') openParenthesis++
+                        tmp += output[output.length-1]
+                        output = output.slice(0,-1)
+                    }while(closeParenthesis - openParenthesis);
+                } else {
+                    do {
+                        tmp += output[output.length-1]
+                        output = output.slice(0,-1)
+                    } while (output&&!['/','*','-','+'].includes(output[output.length-1]));
+                }
+                tmp = tmp.split("").reverse().join("")
+                output += 'factorial(' + tmp + ')' 
                 break;
         }
     }
-    if(forciblyOpen) tmp += ')'
-    if(tmp != '') output += tmp
+    let o = 0
+    let c = 0
+    for(let i = 0; i < output.length; i++) {
+        if(output[i]=='(') o++;
+        if(output[i]==')') c++;
+    }
+    for(let i = 0; i < o - c; i++) {
+        output += ')'
+        inputLine.value += ')'
+    }
     console.log(output)
     let out = eval(output).toString()
     return out
