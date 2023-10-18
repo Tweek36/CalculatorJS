@@ -1,2 +1,2 @@
 # Calculator
-https://tweek36.github.io/Calculator/
+https://tweek36.github.io/CalculatorJS/
